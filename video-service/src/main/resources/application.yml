@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: video-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  servlet:
+    multipart:
+      max-file-size: 2GB
+      max-request-size: 2GB
+
+server:
+  port: 8082
+
+# AWS — set via environment variables (use setup-env.ps1 + .env file)
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  region: ${AWS_REGION:ap-south-1}
+  s3:
+    bucket-name: ${AWS_BUCKET_NAME}
+
+#Actuators
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+

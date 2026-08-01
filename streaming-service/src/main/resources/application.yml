@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: streaming-service
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: streaming-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+            use:
+              type:
+                headers: false
+            value:
+              default:
+                type: com.streamvault.streamingService.event.VideoEncodedEvent
+
+server:
+  port: 8084
+
+# AWS — set via environment variables (use setup-env.ps1 + .env file)
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  region: ${AWS_REGION:ap-south-1}
+  s3:
+    bucket-name: ${AWS_BUCKET_NAME}
+    #Presigned url expiry in minutes
+    presigned-url-expiry: 60
+
+streaming:
+  base-url: ${STREAMING_BASE_URL:http://localhost:8084}
+
+#Actuators
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
